@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private JsonAPI jsonData;
     private DataAdapter adapter;
+    private Button logoutBttn;
+
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,18 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         jsonData =  retrofit.create(JsonAPI.class);
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = sharedPref.edit();
+
+        logoutBttn = findViewById(R.id.logoutButton);
+        logoutBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.clear().commit();
+                finish();
+            }
+        });
 
         recyclerList = findViewById(R.id.myRecycler); /** Declarem la referència per al recyclerList View */
         progressBar = findViewById(R.id.circProgressBar); /** Declarem la referència per la progress bar */
